@@ -7,7 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appinesstest.Model.HeirarchyList
 import com.example.appinesstest.Model.UserModel
-import com.example.moviesapp.Repository.Repository
+import com.example.appinesstest.Repository.Repository
+
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,7 +18,6 @@ import retrofit2.Response
 import javax.inject.Inject
 
 private const val TAG = "RetrofitViewModel"
-
 @HiltViewModel
 class RetrofitViewModel @Inject constructor(
     private val repository: Repository
@@ -36,7 +36,7 @@ class RetrofitViewModel @Inject constructor(
 
     fun makeAPICall() {
         viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.remote.getApiMovies()
+            val response = repository.remote.getApiUsers()
             response.enqueue(object : Callback<UserModel> {
                 override fun onResponse(
                     call: Call<UserModel>,
@@ -45,17 +45,14 @@ class RetrofitViewModel @Inject constructor(
                     val users: MutableList<HeirarchyList> = mutableListOf()
                     Log.d("Response", "${response.body()}")
                     Log.d("Response", "${response.body()?.dataObject}")
-
-
                     response.body()?.dataObject?.forEach {
                        it.myHierarchy.forEach {
                            it.heirarchyList.let { userItem->
-
-                               for (movieItem in userItem) {
+                               for (uItem in userItem) {
                                    var heirarchyList: HeirarchyList = HeirarchyList()
-                                   heirarchyList.contactName = movieItem.contactName
-                                   heirarchyList.contactNumber = movieItem.contactNumber
-                                   heirarchyList.designationName = movieItem.designationName
+                                   heirarchyList.contactName = uItem.contactName
+                                   heirarchyList.contactNumber = uItem.contactNumber
+                                   heirarchyList.designationName = uItem.designationName
 
                                    users.add(heirarchyList)
                                  //  movieItemm.add(movie)
@@ -67,11 +64,6 @@ class RetrofitViewModel @Inject constructor(
                            }
                        }
                    }
-
-
-
-
-
                     liveDataList.postValue(users)
                 }
                 override fun onFailure(call: Call<UserModel>, t: Throwable) {

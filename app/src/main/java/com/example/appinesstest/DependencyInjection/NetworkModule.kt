@@ -1,8 +1,6 @@
 package com.example.appinesstest.DependencyInjection
-
-
 import com.example.appinesstest.Retrofit.ApiInterface
-import com.example.moviesapp.Utils.Constants.Companion.BASE_URL
+import com.example.appinesstest.Utils.Constants.Companion.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

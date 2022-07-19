@@ -56,9 +56,6 @@ class UserListAdapter(
         holder.userDesignation.text = userListData?.designationName
         holder.phone.setOnClickListener {
             Log.d("TAG", "Phone Clicked")
-     /*       val intent = Intent(Intent.ACTION_DIAL)
-            intent.data = Uri.parse("tel:<number>")
-            startActivity(intent)*/
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse("tel:${userListData?.contactNumber}")
          context.   startActivity(intent)

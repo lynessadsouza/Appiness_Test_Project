@@ -1,4 +1,6 @@
-package com.example.moviesapp.Repository
+
+package com.example.appinesstest.Repository
+
 
 import dagger.hilt.android.scopes.ViewModelScoped
 import javax.inject.Inject

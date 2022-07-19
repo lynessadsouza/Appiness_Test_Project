@@ -1,4 +1,4 @@
-package com.example.moviesapp.Utils
+package com.example.appinesstest.Utils
 
 class Constants {
 

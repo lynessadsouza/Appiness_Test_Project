@@ -1,4 +1,5 @@
-package com.example.moviesapp.Repository
+
+package com.example.appinesstest.Repository
 
 import com.example.appinesstest.Retrofit.ApiInterface
 import com.example.appinesstest.Model.UserModel
@@ -8,8 +9,8 @@ import javax.inject.Inject
 class RemoteDataSource @Inject constructor(
     private val apiInterface: ApiInterface,
 ) {
-     fun getApiMovies(): Call<UserModel> {
-        return apiInterface.getMovies()
+     fun getApiUsers(): Call<UserModel> {
+        return apiInterface.getUsers()
     }
 
 }

@@ -5,5 +5,5 @@ import retrofit2.http.GET
 
 interface ApiInterface {
     @GET("myHierarchy")
-    fun getMovies(): Call<UserModel>
+    fun getUsers(): Call<UserModel>
 }
