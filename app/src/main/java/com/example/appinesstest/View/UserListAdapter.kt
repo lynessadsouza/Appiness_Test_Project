@@ -21,7 +21,6 @@ class UserListAdapter(
 ) : RecyclerView.Adapter<UserListAdapter.MyViewHolder>() {
     private var userList: List<HeirarchyList>? = null
 
-
     fun setUserList(userList: List<HeirarchyList>?) {
         this.userList = userList
     }

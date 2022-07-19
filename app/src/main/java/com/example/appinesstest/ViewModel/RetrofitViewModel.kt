@@ -23,6 +23,7 @@ class RetrofitViewModel @Inject constructor(
     private val repository: Repository
 ) : ViewModel() {
     var liveDataList: MutableLiveData<List<HeirarchyList>>
+    val userSearchItem: MutableList<HeirarchyList> = mutableListOf()
 
     init {
         liveDataList = MutableLiveData()
@@ -32,7 +33,15 @@ class RetrofitViewModel @Inject constructor(
         return liveDataList
     }
 
-
+    fun filterUsers(filteredUsrs: String) {
+        val user: MutableList<HeirarchyList> = mutableListOf()
+        for (item in userSearchItem) {
+            if (item.contactName?.lowercase()?.contains(filteredUsrs.lowercase())!!) {
+                user.add(item)
+            }
+        }
+        liveDataList.postValue(user)
+    }
 
     fun makeAPICall() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -49,18 +58,13 @@ class RetrofitViewModel @Inject constructor(
                        it.myHierarchy.forEach {
                            it.heirarchyList.let { userItem->
                                for (uItem in userItem) {
-                                   var heirarchyList: HeirarchyList = HeirarchyList()
+                                   val heirarchyList: HeirarchyList = HeirarchyList()
                                    heirarchyList.contactName = uItem.contactName
                                    heirarchyList.contactNumber = uItem.contactNumber
                                    heirarchyList.designationName = uItem.designationName
-
                                    users.add(heirarchyList)
-                                 //  movieItemm.add(movie)
+                                   userSearchItem.add(heirarchyList)
                                }
-
-
-
-
                            }
                        }
                    }
