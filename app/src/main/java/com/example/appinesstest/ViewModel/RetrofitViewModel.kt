@@ -22,21 +22,19 @@ private const val TAG = "RetrofitViewModel"
 class RetrofitViewModel @Inject constructor(
     private val repository: Repository
 ) : ViewModel() {
-    var liveDataList: MutableLiveData<List<HeirarchyList>>
+    var liveDataList: MutableLiveData<List<HeirarchyList>> = MutableLiveData()
     val userSearchItem: MutableList<HeirarchyList> = mutableListOf()
-
-    init {
-        liveDataList = MutableLiveData()
-    }
+    val alist: ArrayList<HeirarchyList> = ArrayList()
 
     fun getLiveDataObserver(): MutableLiveData<List<HeirarchyList>> {
         return liveDataList
     }
 
-    fun filterUsers(filteredUsrs: String) {
+    fun filterUsers(filteredUsers: String) {
         val user: MutableList<HeirarchyList> = mutableListOf()
-        for (item in userSearchItem) {
-            if (item.contactName?.lowercase()?.contains(filteredUsrs.lowercase())!!) {
+        Log.d("userSearchItem", "$userSearchItem")
+        for (item in alist) {
+            if (item.contactName?.lowercase()?.contains(filteredUsers.lowercase()) == true) {
                 user.add(item)
             }
         }
@@ -54,20 +52,23 @@ class RetrofitViewModel @Inject constructor(
                     val users: MutableList<HeirarchyList> = mutableListOf()
                     Log.d("Response", "${response.body()}")
                     Log.d("Response", "${response.body()?.dataObject}")
-                    response.body()?.dataObject?.forEach {
-                       it.myHierarchy.forEach {
-                           it.heirarchyList.let { userItem->
-                               for (uItem in userItem) {
-                                   val heirarchyList: HeirarchyList = HeirarchyList()
-                                   heirarchyList.contactName = uItem.contactName
-                                   heirarchyList.contactNumber = uItem.contactNumber
-                                   heirarchyList.designationName = uItem.designationName
-                                   users.add(heirarchyList)
-                                   userSearchItem.add(heirarchyList)
-                               }
-                           }
-                       }
-                   }
+                    response.body()?.dataObject?.forEach { dataObject ->
+                        dataObject.myHierarchy.forEach { myHeirarchy ->
+                            myHeirarchy.heirarchyList.let { userItem ->
+                                for (uItem in userItem) {
+                                    val heirarchyList = HeirarchyList()
+                                    heirarchyList.contactName = uItem.contactName
+                                    heirarchyList.contactNumber = uItem.contactNumber
+                                    heirarchyList.designationName = uItem.designationName
+                                    users.add(heirarchyList)
+                                    alist.clear()
+                                    Log.d("userSearchItem", "$userSearchItem")
+                                    Log.d("userSearchItem", "${userSearchItem.size}")
+                                }
+                            }
+                        }
+                    }
+                    alist.addAll(users)
                     liveDataList.postValue(users)
                 }
                 override fun onFailure(call: Call<UserModel>, t: Throwable) {

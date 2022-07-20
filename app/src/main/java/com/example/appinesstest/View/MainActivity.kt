@@ -14,8 +14,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), UserListAdapter.onItemClickListner {
-    private lateinit var viewModel: RetrofitViewModel
-
     lateinit var recyclerAdapter: UserListAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +37,7 @@ class MainActivity : AppCompatActivity(), UserListAdapter.onItemClickListner {
     }
 
     private fun filterUsers(newText: String) {
-        viewModel = ViewModelProvider(this).get(RetrofitViewModel::class.java)
+        val viewModel = ViewModelProvider(this).get(RetrofitViewModel::class.java)
         viewModel.getLiveDataObserver().observe(this) {
             if (it != null) {
                 recyclerAdapter.setUserList(it)
@@ -49,8 +47,8 @@ class MainActivity : AppCompatActivity(), UserListAdapter.onItemClickListner {
             }
         }
         viewModel.filterUsers(newText)
-
     }
+
 
     private fun initRecyclerView() {
         userRecycler.layoutManager = LinearLayoutManager(this)
