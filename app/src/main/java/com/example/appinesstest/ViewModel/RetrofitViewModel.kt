@@ -2,6 +2,7 @@ package com.example.appinesstest.ViewModel
 
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -23,8 +24,7 @@ class RetrofitViewModel @Inject constructor(
     private val repository: Repository
 ) : ViewModel() {
     var liveDataList: MutableLiveData<List<HeirarchyList>> = MutableLiveData()
-    val userSearchItem: MutableList<HeirarchyList> = mutableListOf()
-    val alist: ArrayList<HeirarchyList> = ArrayList()
+    val userSearchItem: ArrayList<HeirarchyList> = ArrayList()
 
     fun getLiveDataObserver(): MutableLiveData<List<HeirarchyList>> {
         return liveDataList
@@ -32,10 +32,13 @@ class RetrofitViewModel @Inject constructor(
 
     fun filterUsers(filteredUsers: String) {
         val user: MutableList<HeirarchyList> = mutableListOf()
-        Log.d("userSearchItem", "$userSearchItem")
-        for (item in alist) {
+        for (item in userSearchItem) {
             if (item.contactName?.lowercase()?.contains(filteredUsers.lowercase()) == true) {
                 user.add(item)
+            }
+            else
+            {
+              Log.d("TAG","No MATCH FOUND")
             }
         }
         liveDataList.postValue(user)
@@ -61,14 +64,12 @@ class RetrofitViewModel @Inject constructor(
                                     heirarchyList.contactNumber = uItem.contactNumber
                                     heirarchyList.designationName = uItem.designationName
                                     users.add(heirarchyList)
-                                    alist.clear()
-                                    Log.d("userSearchItem", "$userSearchItem")
-                                    Log.d("userSearchItem", "${userSearchItem.size}")
+                                    userSearchItem.clear()
                                 }
                             }
                         }
                     }
-                    alist.addAll(users)
+                    userSearchItem.addAll(users)
                     liveDataList.postValue(users)
                 }
                 override fun onFailure(call: Call<UserModel>, t: Throwable) {
